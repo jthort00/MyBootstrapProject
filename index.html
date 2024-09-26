@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Github Repository Viewer</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.6.1/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">My Github Repository Viewer</h1>
+        <div class="form-group">
+            <label for="username">Introduce Github username:</label>
+            <input type="text" class="form-control" id="username">
+        </div>
+
+        <button id="search">Search user</button>
+        <h2>User information</h2>
+        <p> This table shows the repositories of the selected user with some information</p>
+        <table class="table table-striped" id="gitTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Starred</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#search').click(function(){
+                var username = $('#username').val();
+
+                $('#gitTable tbody').empty();
+                $.get(`https://api.github.com/users/${username}/repos`, function(data){
+
+
+                    data.forEach(function(repo){
+                        var row = `
+                        <tr>
+                        <td>${repo.name}</td>
+                        <td>${repo.description || 'No description'}</td>
+                        <td>${repo.watchers_count}</td>
+                    </tr>
+                    `;
+                    $('#gitTable tbody').append(row);
+
+                    });
+                })
+
+                $('#gitTable').show();
+            })
+
+            
+        })
+           
+    </script>
+
+</body>
+</html>
+
